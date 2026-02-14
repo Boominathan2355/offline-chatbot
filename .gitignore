@@ -1,0 +1,36 @@
+# General
+.DS_Store
+*.log
+.env
+.idea/
+.vscode/
+
+# Python
+**/venv/
+**/__pycache__/
+**/*.pyc
+.pyre/
+.pytype/
+**/models/
+!ai-runtime/app/core/model_catalog.py
+!ai-runtime/app/core/image_catalog.py
+
+# Java
+**/build/
+**/.gradle/
+**/bin/
+**/.settings/
+**/.classpath/
+**/.project/
+
+# Node/Frontend
+**/node_modules/
+**/dist/
+**/.next/
+**/out/
+**/build/
+.eslintcache
+
+# AI Assistant
+**/.system_generated/
+/home/boominathan-alagirisamy/.gemini/

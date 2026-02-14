@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+llama-cpp-python
+python-multipart
+langchain
+langchain-community
+psutil
+stable-diffusion-cpp-python
+requests

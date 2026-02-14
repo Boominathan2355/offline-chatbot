@@ -1,0 +1,39 @@
+{
+    "mcpServers": {
+        "filesystem": {
+            "command": "builtin",
+            "args": [],
+            "env": {},
+            "enabled": false,
+            "description": "Access to local filesystem"
+        },
+        "terminal": {
+            "command": "builtin",
+            "args": [],
+            "env": {},
+            "enabled": false,
+            "description": "Execute terminal commands"
+        },
+        "browser": {
+            "command": "builtin",
+            "args": [],
+            "env": {},
+            "enabled": false,
+            "description": "Web browsing capabilities"
+        },
+        "sequential-thinking": {
+            "command": "builtin",
+            "args": [],
+            "env": {},
+            "enabled": true,
+            "description": "Advanced problem solving"
+        },
+        "search-engine": {
+            "command": "builtin",
+            "args": [],
+            "env": {},
+            "enabled": false,
+            "description": "Web search tools"
+        }
+    }
+}

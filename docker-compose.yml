@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/ai-assistant
+    depends_on:
+      - mongo
+    networks:
+      - ai-network
+
+  ai-runtime:
+    build: ./ai-runtime
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ai-runtime/models:/app/models
+    networks:
+      - ai-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ai-network
+
+networks:
+  ai-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

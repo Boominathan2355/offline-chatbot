@@ -1,0 +1,16 @@
+{
+    "venvPath": ".",
+    "venv": "venv",
+    "pythonVersion": "3.13",
+    "pythonPlatform": "Linux",
+    "root": ".",
+    "include": [
+        "app"
+    ],
+    "extraPaths": [
+        ".",
+        "./venv/lib/python3.13/site-packages"
+    ],
+    "reportMissingImports": false,
+    "reportMissingModuleSource": false
+}
