@@ -1,6 +1,11 @@
 
 import logging
-from stable_diffusion_cpp import StableDiffusion
+try:
+    from stable_diffusion_cpp import StableDiffusion
+except ImportError:
+    StableDiffusion = None
+    import logging
+    logging.getLogger(__name__).warning("stable_diffusion_cpp not found, image generation will be unavailable")
 from app.core.config import MODELS_DIR
 import os
 
