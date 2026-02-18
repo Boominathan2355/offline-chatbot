@@ -2,8 +2,10 @@
 import logging
 try:
     from stable_diffusion_cpp import StableDiffusion
+    STABLE_DIFFUSION_AVAILABLE = True
 except ImportError:
     StableDiffusion = None
+    STABLE_DIFFUSION_AVAILABLE = False
     import logging
     logging.getLogger(__name__).warning("stable_diffusion_cpp not found, image generation will be unavailable")
 from app.core.config import MODELS_DIR

@@ -47,6 +47,7 @@ input, textarea {
   color: var(--text-primary);
   border-radius: var(--radius-sm);
   padding: 0.5rem;
+  width: 100%;
   
   &:focus {
     outline: 2px solid var(--primary-color);

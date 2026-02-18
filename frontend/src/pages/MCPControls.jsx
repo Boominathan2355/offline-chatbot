@@ -237,9 +237,25 @@ export default function MCPControls() {
                                 <input placeholder="Brief explanation of capabilities" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
                             </div>
 
-                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                                <button type="button" className="btn-secondary" onClick={() => setShowAddModal(false)} style={{ flex: 1, padding: '0.75rem' }}>Cancel</button>
-                                <button type="submit" className="btn-primary" style={{ flex: 1, padding: '0.75rem' }}>Add Server</button>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                                <button type="button" className="btn-secondary" onClick={() => setShowAddModal(false)} style={{
+                                    flex: 1,
+                                    padding: '0.875rem',
+                                    borderRadius: '12px',
+                                    backgroundColor: 'var(--bg-tertiary)',
+                                    color: 'var(--text-primary)',
+                                    fontWeight: '600',
+                                    transition: 'background-color 0.2s'
+                                }}>Cancel</button>
+                                <button type="submit" className="btn-primary" style={{
+                                    flex: 1,
+                                    padding: '0.875rem',
+                                    borderRadius: '12px',
+                                    backgroundColor: 'var(--primary-color)',
+                                    color: 'white',
+                                    fontWeight: '600',
+                                    transition: 'opacity 0.2s'
+                                }}>Add Server</button>
                             </div>
                         </form>
                     </div>

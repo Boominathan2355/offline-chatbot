@@ -1,15 +1,15 @@
 {
     "venvPath": ".",
     "venv": "venv",
-    "pythonVersion": "3.13",
-    "pythonPlatform": "Linux",
+    "pythonVersion": "3.10",
+    "pythonPlatform": "windows",
     "root": ".",
     "include": [
         "app"
     ],
     "extraPaths": [
         ".",
-        "./venv/lib/python3.13/site-packages"
+        "./venv/lib/python3.10/site-packages"
     ],
     "reportMissingImports": false,
     "reportMissingModuleSource": false

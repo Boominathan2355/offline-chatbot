@@ -9,6 +9,9 @@ import base64
 from app.core.image_catalog import get_image_catalog, find_image_model, IMAGE_MODEL_CATALOG
 from app.core.image_generation import image_service
 from app.core.config import MODELS_DIR
+from app.core.image_generation import image_service, STABLE_DIFFUSION_AVAILABLE
+import asyncio
+import httpx
 
 # We reuse the download logic from models.py or create similar
 # For now, let's just use the models directory.
@@ -52,6 +55,12 @@ def get_catalog():
 @router.post("/generate")
 def generate_image(request: ImageGenerationRequest):
     """Generate an image."""
+    if not STABLE_DIFFUSION_AVAILABLE:
+        raise HTTPException(
+            status_code=400, 
+            detail="stable_diffusion_cpp dependency is not installed on the system. Please refer to the installation guide to enable image generation."
+        )
+
     model_info = find_image_model(request.model_id)
     if not model_info:
         raise HTTPException(status_code=404, detail="Model not found")
@@ -146,25 +155,27 @@ def delete_image_model(model_id: str):
         return {"status": "deleted"}
     return {"status": "not_found"}
 
-import requests
-
-def _download_worker(url: str, dest_path: str, model_id: str):
+async def _download_worker(url: str, dest_path: str, model_id: str):
     try:
-        logger.info(f"Starting download for {model_id} from {url}")
-        with requests.get(url, stream=True) as r:
-            r.raise_for_status()
-            total_size = int(r.headers.get('content-length', 0))
-            if total_size == 0:
-                logger.warning(f"Total size is 0 for {model_id}")
-            
-            downloaded = 0
-            with open(dest_path, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if total_size > 0:
-                        progress = int((downloaded / total_size) * 100)
-                        _image_download_status[model_id] = {"status": "downloading", "progress": progress}
+        logger.info(f"Starting async download for {model_id} from {url}")
+        async with httpx.AsyncClient(follow_redirects=True, timeout=None) as client:
+            async with client.stream("GET", url) as response:
+                response.raise_for_status()
+                total = int(response.headers.get("content-length", 0))
+                downloaded = 0
+                
+                with open(dest_path, "wb") as f:
+                    async for chunk in response.aiter_bytes(chunk_size=256 * 1024):
+                        if chunk:
+                            await asyncio.to_thread(f.write, chunk)
+                            downloaded += len(chunk)
+                            progress = int((downloaded / total) * 100) if total > 0 else 0
+                            _image_download_status[model_id] = {
+                                "status": "downloading", 
+                                "progress": progress,
+                                "downloaded": downloaded,
+                                "total": total
+                            }
             
         logger.info(f"Download completed for {model_id}")
         _image_download_status[model_id] = {"status": "completed", "progress": 100}

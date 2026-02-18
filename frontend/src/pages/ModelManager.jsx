@@ -35,7 +35,7 @@ export default function ModelManager() {
             if (!pollingRef.current[modelId]) {
                 pollingRef.current[modelId] = setInterval(() => {
                     dispatch(fetchDownloadStatus(modelId));
-                }, 2000);
+                }, 800);
             }
         });
 
@@ -158,6 +158,7 @@ export default function ModelManager() {
         const downloading = downloadStatus[model.id]?.status === 'downloading';
         const progress = downloadStatus[model.id]?.progress || 0;
         const _isImage = isImageModel(model);
+        const imageGenBlocked = _isImage && !downloadStatus['sd_available']; // We'll add this to state
 
         return (
             <div key={model.id} className={`model-card ${model.installed ? 'installed' : ''}`}>
@@ -216,7 +217,7 @@ export default function ModelManager() {
                 {/* Download Progress Bar */}
                 {downloading && (
                     <div className="progress-bar-container">
-                        <div className="progress-bar" style={{ width: `${progress}%` }} />
+                        <div className="progress-bar" style={{ width: `${(downloadStatus[model.id]?.downloaded / downloadStatus[model.id]?.total * 100) || 0}%` }} />
                         <span className="progress-label">{progress}%</span>
                     </div>
                 )}
@@ -254,11 +255,17 @@ export default function ModelManager() {
                                 <X size={16} />
                             </button>
                         </div>
+                    ) : imageGenBlocked ? (
+                        <div className="unavailable-notice" style={{ color: 'var(--danger-color)', fontSize: '0.8rem', padding: '0.5rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderRadius: '4px' }}>
+                            <Info size={14} style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                            Image generation dependency missing on this system.
+                        </div>
                     ) : (
                         <button className="btn-download" onClick={() => handleDownload(model.id)}>
                             <Download size={16} /> Download
                         </button>
-                    )}
+                    )
+                }
                 </div>
             </div>
         );
@@ -461,3 +468,4 @@ export default function ModelManager() {
         </div>
     );
 }
+

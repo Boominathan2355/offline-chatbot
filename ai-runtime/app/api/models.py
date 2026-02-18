@@ -134,9 +134,9 @@ async def _do_download(model_id: str, url: str, target_path: str, expected_size:
                 downloaded: int = 0
 
                 with open(temp_path, "wb") as f:
-                    async for chunk in response.aiter_bytes(chunk_size=1024 * 1024):  # 1MB chunks
+                    async for chunk in response.aiter_bytes(chunk_size=256 * 1024):  # 256KB chunks for lively progress
                         if chunk:
-                            f.write(chunk)
+                            await asyncio.to_thread(f.write, chunk)
                             downloaded += len(chunk)
                             progress = int((downloaded / total) * 100) if total > 0 else 0
                             _download_status[model_id] = {
